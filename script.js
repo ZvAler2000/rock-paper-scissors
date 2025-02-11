@@ -1,17 +1,9 @@
 let humanScore;
 let computerScore;
 
-playGame();
 
-function getHumanChoice() {
-    let output = prompt("Please type your choice: ").toLowerCase();
-    if(output == "rock" || output == "paper" || output == "scissors") {
-        return output;
-    }else {
-        console.log("Please select a valid answer.");
-        output = getHumanChoice();
-        return output;
-    }
+function getHumanChoice(input) {
+    return input;
 }
 
 function getComputerChoice() {
@@ -37,24 +29,52 @@ function playGame() {
     computerScore = 0;
     
     console.log("<>--- ROCK, PAPER, SCISSORS ---<>");
-
-    for(let i = 0; i < 5; i++) {
-        console.log(`Round ${i+1}`);
-        let humanChoice = getHumanChoice();
+    let i = 0;
+    console.log(`Round ${++i}`);
+    div.addEventListener("click", (event) => {
+        let humanChoice = event.target.textContent;
         let computerChoice = getComputerChoice();
-        playRound(humanChoice, computerChoice);
+        status.textContent = playRound(humanChoice, computerChoice);
+
+        let listItem = document.createElement("li");
+        let humanChoiceText = document.createElement("p");
+        let computerChoiceText = document.createElement("p");
+
+        listItem.style.display = "flex";
+        listItem.style.flexDirection = "row";
+        humanChoiceText.style.margin = "4px";
+        computerChoiceText.style.margin = "4px";
+
+        listItem.appendChild(humanChoiceText);
+        listItem.appendChild(computerChoiceText);
+        list.appendChild(listItem);
+
+        humanChoiceText.textContent = humanChoice;
+        computerChoiceText.textContent = computerChoice;
+
+
+
         console.log("RESULTS:");
         console.log(`Player: ${humanScore}`);
         console.log(`Computer: ${computerScore}`);
-    }
+        resultDisplay.textContent = `${humanScore} : ${computerScore}`;
 
-    if(humanScore > computerScore) {
-        console.log("Congratulations! You win.");
-    }else if(computerScore > humanScore) {
-        console.log("You lose! Better luck next time!");
-    }else {
-        console.log("Draw! Better luck next time!");
-    }
+        if(humanScore >= 5 || computerScore >= 5) {
+            if(humanScore > computerScore) {
+                alert("Congratulations! You win.!!!!!!!!!!!!!");
+           }else if(computerScore > humanScore) {
+                alert("You lose! Better luck next time!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+            }else {
+                alert("Draw! Better luck next time!!!!!!!!!!!!!!!!!!!!!!!!!");
+            }
+            resultDisplay.textContent = `${humanScore} : ${computerScore}`;
+            humanScore = 0;
+            computerScore = 0;
+            resultDisplay.textContent = `${humanScore} : ${computerScore}`;
+            list.textContent = '';
+        }
+    });
+    
 }
 
 function playRound(humanChoice, computerChoice) {
@@ -63,46 +83,74 @@ function playRound(humanChoice, computerChoice) {
         case "rock":
             switch(computerChoice) {
                 case "rock":
-                    console.log(`Draw! Both chose ${humanChoice}`);
-                    break;
+                    return `Draw! Both chose ${humanChoice}`;
                 case "paper":
-                    console.log(`You lose, ${computerChoice} beats ${humanChoice}!`);
                     computerScore++;
-                    break;
+                    return `You lose, ${computerChoice} beats ${humanChoice}!`;
                 case "scissors":
-                    console.log(`You win, ${humanChoice} beats ${computerChoice}!`);
                     humanScore++;
-                    break;
+                    return `You win, ${humanChoice} beats ${computerChoice}!`;
                 }
             break;
         case "paper":
             switch(computerChoice) {
                 case "rock":
-                    console.log(`You win, ${humanChoice} beats ${computerChoice}!`);
                     humanScore++;
-                    break;
+                    return `You win, ${humanChoice} beats ${computerChoice}!`;
                 case "paper":
-                    console.log(`Draw! Both chose ${humanChoice}`);
-                    break;
+                    return `Draw! Both chose ${humanChoice}`;
                 case "scissors":
-                    console.log(`You lose, ${computerChoice} beats ${humanChoice}!`);
                     computerScore++;
-                    break;
+                    return `You lose, ${computerChoice} beats ${humanChoice}!`;
                 }
             break;
         case "scissors":
             switch(computerChoice) {
                 case "rock":
-                    console.log(`You lose, ${computerChoice} beats ${humanChoice}!`);
                     computerScore++;
-                    break;
+                    return `You lose, ${computerChoice} beats ${humanChoice}!`;
                 case "paper":
-                    console.log(`You win, ${humanChoice} beats ${computerChoice}!`);
                     humanScore++;
-                    break;
+                    return `You win, ${humanChoice} beats ${computerChoice}!`;
                 case "scissors":
-                    console.log(`Draw! Both chose ${humanChoice}`);
-                    break;
+                    return `Draw! Both chose ${humanChoice}`;
                 }
     }
 }
+
+const body = document.getElementById("body");
+let rock = document.createElement("button");
+let paper = document.createElement("button");
+let scissors = document.createElement("button");
+let div = document.createElement("div");
+
+rock.textContent = "rock";
+paper.textContent = "paper";
+scissors.textContent = "scissors";
+
+div.appendChild(rock);
+div.appendChild(paper);
+div.appendChild(scissors);
+const status = document.createElement("div");
+
+body.appendChild(div);
+body.appendChild(status);
+
+let playerSelection;
+body.addEventListener("click", (event) => {return event.target.textContent;});
+
+const resultDisplay = document.createElement("div");
+resultDisplay.classList.add("results");
+resultDisplay.style.alignContent = "center";
+body.appendChild(resultDisplay);
+
+let list = document.createElement("ul");
+list.style.listStyleType = "none";
+body.appendChild(list);
+
+body.style.display = "flex";
+body.style.flexDirection = "column";
+body.style.alignItems = "center";
+body.style.padding = "8px";
+
+playGame();
